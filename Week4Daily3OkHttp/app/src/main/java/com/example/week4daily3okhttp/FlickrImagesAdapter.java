@@ -1,11 +1,8 @@
 package com.example.week4daily3okhttp;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +20,13 @@ import java.util.List;
 
 public class FlickrImagesAdapter extends RecyclerView.Adapter<FlickrImagesAdapter.ViewHolder> {
 
-    List<ItemsItem> itemList;
+    private List<ItemsItem> itemList;
 
-    public FlickrImagesAdapter(List<ItemsItem> itemList) {
+    protected FlickrImagesAdapter(List<ItemsItem> itemList) {
         this.itemList = itemList;
     }
 
-    public void setItemList(List<ItemsItem> itemList) {
+    protected void setItemList(List<ItemsItem> itemList) {
         this.itemList = itemList;
         notifyDataSetChanged();
     }
@@ -59,7 +56,7 @@ public class FlickrImagesAdapter extends RecyclerView.Adapter<FlickrImagesAdapte
         ImageView ivThumbnail;
         TextView tvTaken, tvPublished, tvURL;
 
-        public ViewHolder(@NonNull View itemView) {
+        private ViewHolder(@NonNull View itemView) {
             super(itemView);
             ivThumbnail = itemView.findViewById(R.id.ivThumbnail);
             tvTaken = itemView.findViewById(R.id.tvTaken);
@@ -83,10 +80,14 @@ public class FlickrImagesAdapter extends RecyclerView.Adapter<FlickrImagesAdapte
                             break;
                         case DialogInterface.BUTTON_NEGATIVE:
                             AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                            //builder.setView()
+                            LayoutInflater factory = LayoutInflater.from(view.getContext());
+                            @SuppressLint("InflateParams") final View dialogView = factory.inflate(R.layout.dialog_image, null);
+                            TextView url = view.findViewById(R.id.tvURL);
+                            ImageView image = dialogView.findViewById(R.id.ivDialogImage);
+                            Glide.with(dialogView).load(url.getText().toString()).into(image);
+                            builder.setView(dialogView).show();
                             break;
                     }
-
                 }
             };
             AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
